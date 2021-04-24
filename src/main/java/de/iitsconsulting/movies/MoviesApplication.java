@@ -1,7 +1,7 @@
 package de.iitsconsulting.movies;
 
-import de.iitsconsulting.movies.repo.DirectorRepository;
-import de.iitsconsulting.movies.repo.MovieRepository;
+import de.iitsconsulting.movies.repo.jpa.DirectorRepository;
+import de.iitsconsulting.movies.repo.jpa.MovieMovieRepository;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +15,7 @@ public class MoviesApplication {
     }
 
     @Bean
-    ApplicationRunner applicationRunner(MovieRepository movieRepository, DirectorRepository directorRepository) {
+    ApplicationRunner applicationRunner(MovieMovieRepository movieRepository, DirectorRepository directorRepository) {
         return args -> {
         };
     }

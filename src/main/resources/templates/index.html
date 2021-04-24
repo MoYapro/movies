@@ -1,31 +1,48 @@
 <!DOCTYPE HTML>
 <head>
-  <meta charset="UTF-8"/>
-  <title>IITS Movie Database</title>
-  <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0-1/css/bootstrap.min.css} "/>
+    <meta charset="UTF-8"/>
+    <title>IITS Movie Database</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0-1/css/bootstrap.min.css} "/>
 </head>
+<h2>Movies in iits movie database</h2>
+<form class="form-inline" th:object="${searchParams}">
+    <div class="input-group mb-2 mr-sm-2">
+        <div class="input-group-prepend">
+            <div class="input-group-text">From</div>
+        </div>
+        <input type="text" class="form-control" th:field="*{yearFrom}" id="yearFrom" placeholder="year">
+    </div>
+    <div class="input-group mb-2 mr-sm-2">
+        <div class="input-group-prepend">
+            <div class="input-group-text">To</div>
+        </div>
+        <input type="text" class="form-control" th:field="*{yearTo}" id="yearTo" placeholder="year">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Search</button>
+</form>
 <div th:switch="${movies}">
-  <h2 th:case="null">No movies yet!</h2>
-  <div th:case="*">
-    <h2>Movies in iits movie database</h2>
-    <table class="table table-striped table-hover">
-    <thead class="thead-dark">
-      <tr>
-        <th>Title</th>
-        <th>Year</th>
-        <th>Edit</th>
-        <th>Delete</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="movie : ${movies}">
-        <td th:text="${movie.title}"></td>
-        <td th:text="${movie.year}"></td>
-        <td><a class="btn btn-primary" th:href="@{/edit/{id}(id=${movie.id})}">Edit</a></td>
-        <td><a class="btn btn-danger" th:href="@{/delete/{id}(id=${movie.id})}">Delete</a></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <p><a class="btn btn-primary" href="/add-movie">Add a new movie</a></p>
+    <h2 th:case="null">No movies yet!</h2>
+    <div th:case="*">
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th>Title</th>
+                <th>Year</th>
+                <th>Director</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="movie : ${movies}">
+                <td th:text="${movie.title}"></td>
+                <td th:text="${movie.year}"></td>
+                <td th:text="${movie.director.firstName}+' '+${movie.director.lastName}"></td>
+                <td><a class="btn btn-primary" th:href="@{/edit/{id}(id=${movie.id})}">Edit</a></td>
+                <td><a class="btn btn-danger" th:href="@{/delete/{id}(id=${movie.id})}">Delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <p><a class="btn btn-primary" href="/add-movie">Add a new movie</a></p>
 </div>
