@@ -9,9 +9,7 @@ import de.iitsconsulting.movies.model.Director;
 import de.iitsconsulting.movies.model.Movie;
 import de.iitsconsulting.movies.repo.MyMovieRepositoryImplementationImpl;
 import de.iitsconsulting.movies.repo.jpa.DirectorRepository;
-import org.springframework.stereotype.Service;
 
-@Service
 public class MovieService {
 
     private MyMovieRepositoryImplementationImpl movieRepository;
