@@ -3,9 +3,8 @@ package de.iitsconsulting.movies.controller;
 import javax.validation.Valid;
 
 import de.iitsconsulting.movies.model.Movie;
-import de.iitsconsulting.movies.repo.MyMovieRepositoryImplementationImpl;
+import de.iitsconsulting.movies.repo.jpa.MovieRepository;
 import de.iitsconsulting.movies.service.MovieService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,11 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class MoviesController {
 
-    @Autowired
-    private MyMovieRepositoryImplementationImpl myMovieRepository;
+    public MoviesController(MovieRepository movieRepository, MovieService movieService) {
+        this.movieRepository = movieRepository;
+        this.movieService = movieService;
+    }
 
-    @Autowired
-    private MovieService movieService;
+    private final MovieRepository movieRepository;
+
+    private final MovieService movieService;
 
     private boolean isNotNullAndNotEmpty(String value) {
         return value != null && !value.equals("");
@@ -29,12 +31,11 @@ public class MoviesController {
 
     @GetMapping("/")
     public String showMovies(Model model, @ModelAttribute("searchParams") SearchParams searchparams) {
-
         if (isNotNullAndNotEmpty(searchparams.getYearFrom()) & isNotNullAndNotEmpty(searchparams.getYearTo())) {
-            model.addAttribute("movies", myMovieRepository.findMovieByYear(Integer.valueOf(searchparams.getYearFrom()),
-                    Integer.valueOf(searchparams.getYearTo())));
+            model.addAttribute("movies",
+                movieRepository.findMovieByYearBetween(Integer.valueOf(searchparams.getYearFrom()), Integer.valueOf(searchparams.getYearTo())));
         } else {
-            model.addAttribute("movies", myMovieRepository.findAll());
+            model.addAttribute("movies", movieRepository.findAll());
         }
 
         return "index";
@@ -57,8 +58,7 @@ public class MoviesController {
 
     @GetMapping("/edit/{id}")
     public String showUpdateForm(@PathVariable("id") long id, Model model) {
-        Movie movie = myMovieRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid movie Id:" + id));
+        Movie movie = movieRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid movie Id:" + id));
 
         MovieDtoResource movieDtoResource = new MovieDtoResource();
         movieDtoResource.title = movie.getTitle();
@@ -71,8 +71,7 @@ public class MoviesController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateMovie(@PathVariable("id") long id, @Valid @ModelAttribute("movieDto") MovieDtoResource movie, BindingResult result,
-                              Model model) {
+    public String updateMovie(@PathVariable("id") long id, @Valid @ModelAttribute("movieDto") MovieDtoResource movie, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("id", id);
             return "update-movie";
@@ -84,8 +83,7 @@ public class MoviesController {
 
     @GetMapping("/delete/{id}")
     public String deleteMovie(@PathVariable("id") long id, Model model) {
-        Movie movie = myMovieRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid movie Id:" + id));
+        Movie movie = movieRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid movie Id:" + id));
         try {
             movieService.deleteMovie(movie);
         } catch (Exception e) {

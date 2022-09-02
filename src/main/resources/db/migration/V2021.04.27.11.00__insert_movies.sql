@@ -5,7 +5,7 @@ INSERT INTO movie values (movie_id_seq.nextval, 'Terminator 2', 1991, director_i
 INSERT INTO movie values (movie_id_seq.nextval, 'Titanic', 1997, director_id_seq.currval );
 
 INSERT INTO director values(director_id_seq.nextval, 'Steven', 'Spielberg');
-INSERT INTO movie values (movie_id_seq.currval, 'Raiders of the Lost Ark', 1981, director_id_seq.currval );
+INSERT INTO movie values (movie_id_seq.nextval, 'Raiders of the Lost Ark', 1981, director_id_seq.currval );
 INSERT INTO movie values (movie_id_seq.nextval, 'ET', 1984, director_id_seq.currval );
 INSERT INTO movie values (movie_id_seq.nextval, 'Jurassic Park', 1993, director_id_seq.currval );
 
