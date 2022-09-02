@@ -61,4 +61,24 @@ public class MovieService {
             directorWithMovie.get().getMovies().remove(movie);
         }
     }
+
+    public List<Movie> findMovieByYearBetween(Integer valueOf, Integer valueOf1) {
+        return null; //TODO implement me
+    }
+
+    public List<Movie> searchAllStuff(String searchString) {
+        return null;//TODO implement me
+    }
+
+    public List<Movie> findAll() {
+        return movieRepository.findAll();
+    }
+
+    public Optional<Movie> findById(long id) {
+        return movieRepository.findById(id);
+    }
+
+    public String getMoviesByDirector(String searchString) {
+        return null;
+    }
 }
