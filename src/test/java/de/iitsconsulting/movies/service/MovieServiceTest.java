@@ -17,16 +17,26 @@ import de.iitsconsulting.movies.repo.jpa.DirectorRepository;
 import de.iitsconsulting.movies.repo.jpa.MovieRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class MovieServiceTest {
 
+    @Mock
+    private MovieRepository movieRepository;
+
+    @Mock
+    private DirectorRepository directorRepository;
+
+    @InjectMocks
+    private MovieService sut;
+
     @Test
     public void findMovieByYearBetween() {
-        MovieService movieService = new MovieService(mock(MovieRepository.class), mock(DirectorRepository.class));
-        List<Movie> result = movieService.findMovieByYearBetween(2000, 2010);
-        /// check me
+        List<Movie> result = sut.findMovieByYearBetween(2000, 2010);
+        verify(movieRepository).findMovieByYearBetween(2000, 2010);
     }
 
     @Test
