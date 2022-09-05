@@ -27,8 +27,8 @@ public class MoviesController {
 
     @GetMapping("/")
     public String showMovies(Model model, @ModelAttribute("searchParams") SearchParams searchparams) {
-            model.addAttribute("movies",
-                movieService.findMovieByYearBetween(Integer.valueOf(searchparams.getYearFrom()), Integer.valueOf(searchparams.getYearTo())));
+        model.addAttribute("movies",
+            movieService.findMovieByYearBetween(Integer.valueOf(searchparams.getYearFrom()), Integer.valueOf(searchparams.getYearTo())));
         if (isNotNullAndNotEmpty(searchparams.getYearFrom()) & isNotNullAndNotEmpty(searchparams.getYearTo())) {
         } else {
             model.addAttribute("movies", movieService.findAll());
@@ -36,9 +36,9 @@ public class MoviesController {
 
         return "index";
     }
+
     public String searchAllStuff(Model model, String searchString) {
-        model.addAttribute("movies",
-            movieService.searchAllStuff(searchString));
+        model.addAttribute("movies", movieService.searchAllStuff(searchString));
         return "index";
     }
 

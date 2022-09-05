@@ -67,7 +67,7 @@ public class MovieService {
     }
 
     public List<Movie> searchAllStuff(String searchString) {
-        return null;//TODO implement me
+        return null; //TODO implement me
     }
 
     public List<Movie> findAll() {
@@ -78,7 +78,8 @@ public class MovieService {
         return movieRepository.findById(id);
     }
 
-    public String getMoviesByDirector(String searchString) {
-        return null;
+    public String getMoviesByDirector(String directorName) {
+        return null; //TODO implement me
     }
+
 }
