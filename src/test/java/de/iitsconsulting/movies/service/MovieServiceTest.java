@@ -1,6 +1,7 @@
 package de.iitsconsulting.movies.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,7 +47,8 @@ class MovieServiceTest {
         List<Movie> result = sut.findMovieByYearBetween(2000, 2010);
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(3);
-        assertThat(result.stream().map(movie -> movie.getTitle())).containsExactlyInAnyOrder("Inglourious Basterds", "Avatar", "Kill Bill");
+        assertThat(result.stream().map(Movie::getTitle).collect(Collectors.toList()))
+            .containsExactlyInAnyOrder("Inglourious Basterds", "Avatar", "Kill Bill");
     }
 
     @Test
@@ -75,7 +77,7 @@ class MovieServiceTest {
     public void getMoviesByDirector_notFound() {
         String searchString = "not in database";
         String result = sut.getMoviesByDirector(searchString);
-        assertEquals(result, String.format(searchString, "could not find movie for '%s'"));
+        assertEquals(result, String.format("could not find movie for '%s'", searchString));
     }
 
     @Test
@@ -90,10 +92,11 @@ class MovieServiceTest {
         assertThat(addedMovie).isNotNull();
         assertThat(addedMovie.getDirector()).isNotNull();
         verify(movieRepository, times(1)).save(any());
+        verify(directorRepository, times(1)).save(any());
     }
 
     @Test()
-    public void addMovie_invalid_firstName() {
+    public void addMovie_invalid_lastName() {
         Integer year = 2010;
         String firstName = "Spielberg";
         String lastName = "";
@@ -102,8 +105,7 @@ class MovieServiceTest {
     }
 
     @Test()
-    public void addMovie_invalid_lastName() {
-        MovieService movieService = new MovieService(mock(MovieRepository.class), mock(DirectorRepository.class));
+    public void addMovie_invalid_firstName() {
         Integer year = 2010;
         String firstName = "";
         String lastName = "Stefan";
@@ -113,7 +115,6 @@ class MovieServiceTest {
 
     @Test()
     public void addMovie_invalid_title() {
-        MovieService movieService = new MovieService(mock(MovieRepository.class), mock(DirectorRepository.class));
         Integer year = 2010;
         String firstName = "";
         String lastName = "Stefan";
@@ -133,7 +134,8 @@ class MovieServiceTest {
     @Test
     public void searchAllStuff() {
         List<Movie> result = sut.searchAllStuff("Spielberg 2009");
-        assertThat(result.stream().map(movie -> movie.getTitle())).containsExactlyInAnyOrder();
+        assertThat(result.stream().map(Movie::getTitle).collect(Collectors.toList()))
+            .containsExactlyInAnyOrder();
     }
 
     @Test
