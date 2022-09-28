@@ -47,7 +47,7 @@ class MovieServiceTest {
         List<Movie> result = sut.findMovieByYearBetween(2000, 2010);
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(3);
-        assertThat(result.stream().map(Movie::getTitle).collect(Collectors.toList()))
+        assertThat(result.stream().map(Movie::getTitle))
             .containsExactlyInAnyOrder("Inglourious Basterds", "Avatar", "Kill Bill");
     }
 
@@ -134,7 +134,7 @@ class MovieServiceTest {
     @Test
     public void searchAllStuff() {
         List<Movie> result = sut.searchAllStuff("Spielberg 2009");
-        assertThat(result.stream().map(Movie::getTitle).collect(Collectors.toList()))
+        assertThat(result.stream().map(Movie::getTitle))
             .containsExactlyInAnyOrder();
     }
 
