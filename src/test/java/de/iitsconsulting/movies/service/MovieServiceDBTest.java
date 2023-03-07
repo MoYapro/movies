@@ -1,46 +1,31 @@
 package de.iitsconsulting.movies.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import de.iitsconsulting.movies.MoviesApplication;
 import de.iitsconsulting.movies.controller.MovieDtoResource;
-import de.iitsconsulting.movies.model.Director;
 import de.iitsconsulting.movies.model.Movie;
-import de.iitsconsulting.movies.repo.jpa.DirectorRepository;
 import de.iitsconsulting.movies.repo.jpa.MovieRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+@SpringBootTest(classes = MoviesApplication.class)
+@ActiveProfiles("db-test")
 @ExtendWith(MockitoExtension.class)
-class MovieServiceTest {
+class MovieServiceDBTest {
 
-    @Mock
+    @Autowired
     private MovieRepository movieRepository;
 
-    @Mock
-    private DirectorRepository directorRepository;
-
-    @InjectMocks
+    @Autowired
     private MovieService sut;
-
-    @AfterEach
-    public void cleanup() {
-        reset(movieRepository);
-        reset(directorRepository);
-    }
 
     @Test
     public void findMovieByYearBetween() {
@@ -48,7 +33,7 @@ class MovieServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(3);
         assertThat(result.stream().map(Movie::getTitle))
-            .containsExactlyInAnyOrder("Inglourious Basterds", "Avatar", "Kill Bill");
+            .containsExactlyInAnyOrder("Inglorious Bastards", "Avatar", "Kill Bill");
     }
 
     @Test
@@ -84,15 +69,11 @@ class MovieServiceTest {
     public void addMovie() {
         Integer year = 2010;
         String firstName = "Spielberg";
-        String lastName = "Stefan";
+        String lastName = "Steven";
         String title = "A.i.";
-        when(movieRepository.save(any())).thenReturn(new Movie(1L, title, year, new Director(1L, firstName, lastName, null)));
-        when(directorRepository.save(any())).thenReturn(new Director(1L, firstName, lastName, null));
         Movie addedMovie = sut.saveMovie(firstName, lastName, title, year);
         assertThat(addedMovie).isNotNull();
         assertThat(addedMovie.getDirector()).isNotNull();
-        verify(movieRepository, times(1)).save(any());
-        verify(directorRepository, times(1)).save(any());
     }
 
     @Test()

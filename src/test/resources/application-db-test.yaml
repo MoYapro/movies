@@ -1,0 +1,15 @@
+spring:
+    jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+          format_sql: true
+          dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+    open-in-view: false
+    datasource:
+      url:  jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MYSQL;NON_KEYWORDS=YEAR;INIT=RUNSCRIPT FROM 'classpath:db/migration/V2021.04.27.10.50__create_tables.sql'\;RUNSCRIPT FROM 'classpath:db/migration/V2021.04.27.11.00__insert_movies.sql'
+      username: sa
+      password:
+      driver-class-name: org.h2.Driver

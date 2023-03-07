@@ -10,11 +10,11 @@
     </parent>
     <groupId>de.iitsconsulting</groupId>
     <artifactId>movies</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>movies</name>
     <description>Demo project for Spring Boot</description>
     <properties>
-        <java.version>8</java.version>
+        <java.version>11</java.version>
         <kotlin.version>1.8.10</kotlin.version>
     </properties>
     <dependencies>
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>runtime</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -156,5 +156,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
