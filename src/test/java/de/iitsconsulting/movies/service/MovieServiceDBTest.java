@@ -67,10 +67,10 @@ class MovieServiceDBTest {
 
     @Test
     public void addMovie() {
-        Integer year = 2010;
+        Integer year = 1971;
         String firstName = "Spielberg";
         String lastName = "Steven";
-        String title = "A.i.";
+        String title = "Duel";
         Movie addedMovie = sut.saveMovie(firstName, lastName, title, year);
         assertThat(addedMovie).isNotNull();
         assertThat(addedMovie.getDirector()).isNotNull();
