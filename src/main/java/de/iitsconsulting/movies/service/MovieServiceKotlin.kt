@@ -5,8 +5,8 @@ import de.iitsconsulting.movies.model.Director
 import de.iitsconsulting.movies.model.Movie
 import de.iitsconsulting.movies.repo.jpa.DirectorRepository
 import de.iitsconsulting.movies.repo.jpa.MovieRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import java.util.*
 import javax.transaction.Transactional
 
 @Service
@@ -25,20 +25,22 @@ open class MovieServiceKotlin(movieRepository: MovieRepository, directorReposito
         return saveMovie(title, year, savedDirector)
     }
 
-    private fun saveMovie(title: String, year: Int, savedDirector: Director): Movie {
-        val movieEntity = Movie()
-        movieEntity.director = savedDirector
-        movieEntity.title = title
-        movieEntity.year = year
-        return movieRepository.save(movieEntity)
-    }
+    private fun saveMovie(title: String, year: Int, savedDirector: Director): Movie =
+        movieRepository.save(
+            Movie().apply {
+                director = savedDirector
+                this.title = title
+                this.year = year
+            }
+        )
 
-    private fun getSavedDirector(directorFirstName: String, directorLastName: String): Director {
-        val director = Director()
-        director.firstName = directorFirstName
-        director.lastName = directorLastName
-        return directorRepository.save(director)
-    }
+    private fun getSavedDirector(directorFirstName: String, directorLastName: String): Director =
+        directorRepository.save(
+            Director().apply {
+                firstName = directorFirstName
+                lastName = directorLastName
+            }
+        )
 
     fun updateMovie(theValueFromController: MovieDtoResource) {
         saveMovie(
@@ -52,15 +54,13 @@ open class MovieServiceKotlin(movieRepository: MovieRepository, directorReposito
     @Transactional
     open fun deleteMovie(movie: Movie?) {
         val allDirectors: MutableList<Director> = directorRepository.findAll()
-        val directorWithMovie: Optional<Director> =
-            allDirectors.stream().filter { d -> d.movies.contains(movie) }.findFirst()
-        if (directorWithMovie.isPresent()) {
-            directorWithMovie.get().movies.remove(movie)
-        }
+        val directorWithMovie: Director? =
+            allDirectors.firstOrNull { d -> d.movies.contains(movie) }
+        directorWithMovie?.movies?.remove(movie)
     }
 
-    fun findMovieByYearBetween(valueOf: Integer?, valueOf1: Integer?): List<Movie>? {
-        return null //TODO implement me
+    fun findMovieByYearBetween(valueOf: Int, valueOf1: Int): List<Movie> {
+        return emptyList() //TODO implement me
     }
 
     fun searchAllStuff(searchString: String?): List<Movie>? {
@@ -68,11 +68,11 @@ open class MovieServiceKotlin(movieRepository: MovieRepository, directorReposito
     }
 
     fun findAll(): List<Movie> {
-        return movieRepository.findAll().toList()
+        return movieRepository.findAll()
     }
 
-    fun findById(id: Long): Optional<Movie> {
-        return movieRepository.findById(id)
+    fun findById(id: Long): Movie? {
+        return movieRepository.findByIdOrNull(id)
     }
 
     fun getMoviesByDirector(directorName: String?): String? {

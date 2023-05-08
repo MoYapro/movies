@@ -20,7 +20,7 @@ internal class MovieServiceDBKotlinTest {
     private val movieRepository: MovieRepository? = null
 
     @Autowired
-    private val sut: MovieService? = null
+    private val sut: MovieServiceKotlin? = null
     @Test
     fun findMovieByYearBetween() {
         val result = sut!!.findMovieByYearBetween(2000, 2010)
@@ -155,7 +155,7 @@ internal class MovieServiceDBKotlinTest {
     @Test
     fun searchAllStuff() {
         val result = sut!!.searchAllStuff("Spielberg 2009")
-        Assertions.assertThat(result.stream().map { obj: Movie -> obj.title })
+        Assertions.assertThat(result?.map { obj: Movie -> obj.title })
             .containsExactlyInAnyOrder()
     }
 
