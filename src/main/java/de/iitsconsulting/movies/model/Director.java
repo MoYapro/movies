@@ -22,11 +22,11 @@ public class Director {
 
     @Getter
     @Setter
-    private String firstName;
+    public String firstName;
 
     @Getter
     @Setter
-    private String lastName;
+    public String lastName;
 
     @Getter
     @Setter
@@ -34,7 +34,7 @@ public class Director {
             mappedBy = "director",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<Movie> movies;
+    public List<Movie> movies;
 
     @Override
     public String toString() {

@@ -1,85 +1,81 @@
-package de.iitsconsulting.movies.service;
+package de.iitsconsulting.movies.service
 
-import de.iitsconsulting.movies.controller.MovieDtoResource;
-import de.iitsconsulting.movies.model.Director;
-import de.iitsconsulting.movies.model.Movie;
-import de.iitsconsulting.movies.repo.jpa.DirectorRepository;
-import de.iitsconsulting.movies.repo.jpa.MovieRepository;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
+import de.iitsconsulting.movies.controller.MovieDtoResource
+import de.iitsconsulting.movies.model.Director
+import de.iitsconsulting.movies.model.Movie
+import de.iitsconsulting.movies.repo.jpa.DirectorRepository
+import de.iitsconsulting.movies.repo.jpa.MovieRepository
+import org.springframework.stereotype.Service
+import java.util.*
+import javax.transaction.Transactional
 
 @Service
-public class MovieServiceKotlin {
+open class MovieServiceKotlin(movieRepository: MovieRepository, directorRepository: DirectorRepository) {
+    private val movieRepository: MovieRepository
+    private val directorRepository: DirectorRepository
 
-    private final MovieRepository movieRepository;
-    private DirectorRepository directorRepository;
-
-    public MovieServiceKotlin(MovieRepository movieRepository, DirectorRepository directorRepository) {
-        this.movieRepository = movieRepository;
-        this.directorRepository = directorRepository;
+    init {
+        this.movieRepository = movieRepository
+        this.directorRepository = directorRepository
     }
 
     @Transactional
-    public Movie saveMovie(final String directorFirstName, final String directorLastName, final String title, final int year) {
-
-        Director savedDirector = getSavedDirector(directorFirstName, directorLastName);
-        Movie movie = saveMovie(title, year, savedDirector);
-        return movie;
+    open fun saveMovie(directorFirstName: String, directorLastName: String, title: String, year: Int): Movie {
+        val savedDirector: Director = getSavedDirector(directorFirstName, directorLastName)
+        return saveMovie(title, year, savedDirector)
     }
 
-    private Movie saveMovie(String title, int year, Director savedDirector) {
-        Movie movieEntity = new Movie();
-        movieEntity.setDirector(savedDirector);
-        movieEntity.setTitle(title);
-        movieEntity.setYear(year);
-        return movieRepository.save(movieEntity);
+    private fun saveMovie(title: String, year: Int, savedDirector: Director): Movie {
+        val movieEntity = Movie()
+        movieEntity.director = savedDirector
+        movieEntity.title = title
+        movieEntity.year = year
+        return movieRepository.save(movieEntity)
     }
 
-    private Director getSavedDirector(String directorFirstName, String directorLastName) {
-        Director director = new Director();
-        director.setFirstName(directorFirstName);
-        director.setLastName(directorLastName);
-        Director savedDirector = directorRepository.save(director);
-        return savedDirector;
+    private fun getSavedDirector(directorFirstName: String, directorLastName: String): Director {
+        val director = Director()
+        director.firstName = directorFirstName
+        director.lastName = directorLastName
+        return directorRepository.save(director)
     }
 
-    public void updateMovie(MovieDtoResource theValueFromController) {
-        saveMovie(theValueFromController.getDirectorFirstName(),
-            theValueFromController.getDirectorLastName(),
-            theValueFromController.getTitle(),
-            theValueFromController.getYear());
+    fun updateMovie(theValueFromController: MovieDtoResource) {
+        saveMovie(
+            theValueFromController.directorFirstName,
+            theValueFromController.directorLastName,
+            theValueFromController.title,
+            theValueFromController.year
+        )
     }
 
     @Transactional
-    public void deleteMovie(Movie movie) {
-        List<Director> allDirectors = directorRepository.findAll();
-        Optional<Director> directorWithMovie = allDirectors.stream().filter(d -> d.getMovies().contains(movie)).findFirst();
+    open fun deleteMovie(movie: Movie?) {
+        val allDirectors: MutableList<Director> = directorRepository.findAll()
+        val directorWithMovie: Optional<Director> =
+            allDirectors.stream().filter { d -> d.movies.contains(movie) }.findFirst()
         if (directorWithMovie.isPresent()) {
-            directorWithMovie.get().getMovies().remove(movie);
+            directorWithMovie.get().movies.remove(movie)
         }
     }
 
-    public List<Movie> findMovieByYearBetween(Integer valueOf, Integer valueOf1) {
-        return null; //TODO implement me
+    fun findMovieByYearBetween(valueOf: Integer?, valueOf1: Integer?): List<Movie>? {
+        return null //TODO implement me
     }
 
-    public List<Movie> searchAllStuff(String searchString) {
-        return null; //TODO implement me
+    fun searchAllStuff(searchString: String?): List<Movie>? {
+        return null //TODO implement me
     }
 
-    public List<Movie> findAll() {
-        return movieRepository.findAll();
+    fun findAll(): List<Movie> {
+        return movieRepository.findAll().toList()
     }
 
-    public Optional<Movie> findById(long id) {
-        return movieRepository.findById(id);
+    fun findById(id: Long): Optional<Movie> {
+        return movieRepository.findById(id)
     }
 
-    public String getMoviesByDirector(String directorName) {
-        return null; //TODO implement me
+    fun getMoviesByDirector(directorName: String?): String? {
+        return null //TODO implement me
     }
-
 }

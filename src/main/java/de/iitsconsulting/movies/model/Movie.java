@@ -29,18 +29,17 @@ public class Movie {
     @Getter
     @Setter
     @NotBlank(message = "Title is mandatory")
-    private String title;
+    public String title;
 
     @Getter
     @Setter
     @Min(value = 1900, message = "Invalid year")
-    private int year;
-
+    public int year;
     @Getter
     @Setter
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "director_id", foreignKey = @ForeignKey(name = "fk_movie_director"))
-    private Director director;
+    public Director director;
 
 
     @Override
