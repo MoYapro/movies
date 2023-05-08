@@ -63,19 +63,13 @@ open class MovieServiceKotlin(movieRepository: MovieRepository, directorReposito
         return emptyList() //TODO implement me
     }
 
-    fun searchAllStuff(searchString: String?): List<Movie>? {
-        return null //TODO implement me
-    }
+    fun searchAllStuff(searchString: String?): List<Movie>?  = null
 
     fun findAll(): List<Movie> {
         return movieRepository.findAll()
     }
 
-    fun findById(id: Long): Movie? {
-        return movieRepository.findByIdOrNull(id)
-    }
+    fun findById(id: Long): Movie? = movieRepository.findByIdOrNull(id)
 
-    fun getMoviesByDirector(directorName: String?): String? {
-        return null //TODO implement me
-    }
+    fun getMoviesByDirector(directorName: String?): String? = null //TODO implement me
 }
